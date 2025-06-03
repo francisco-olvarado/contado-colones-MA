@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Colones - Costa Rica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #e8e8e8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 30, 60, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #00d4aa;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            background: rgba(40, 40, 80, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #00d4aa;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .currency-column {
+            background: rgba(40, 40, 80, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #00d4aa;
+        }
+
+        .section h2 {
+            color: #00d4aa;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: "💰";
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .denomination-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .denomination {
+            background: rgba(60, 60, 120, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .denomination:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        .denomination-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .denomination-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #00d4aa;
+        }
+
+        .denomination-total {
+            font-size: 1rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .counter-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .counter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .counter-btn.plus {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .counter-btn.plus:hover {
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .counter-display {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(0, 150, 120, 0.2));
+            border: 2px solid #00d4aa;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .total-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00d4aa;
+            text-shadow: 0 0 30px rgba(0, 212, 170, 0.5);
+            margin: 10px 0;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .total-amount {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Contador de Colones</h1>
+            <p>Sistema de conteo de billetes y monedas de Costa Rica</p>
+        </div>
+
+        <div class="main-content">
+            <div class="currency-column">
+                <h2>Billetes</h2>
+                <div class="denomination-grid">
+                    <div class="denomination" data-value="50000">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡50,000</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="20000">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡20,000</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="10000">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡10,000</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="5000">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡5,000</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="2000">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡2,000</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="1000">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡1,000</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="currency-column">
+                <h2>Monedas</h2>
+                <div class="denomination-grid">
+                    <div class="denomination" data-value="500">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡500</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="100">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡100</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="50">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡50</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="25">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡25</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="10">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡10</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+
+                    <div class="denomination" data-value="5">
+                        <div class="denomination-header">
+                            <span class="denomination-value">₡5</span>
+                            <span class="denomination-total">₡0</span>
+                        </div>
+                        <div class="counter-controls">
+                            <button class="counter-btn minus">-</button>
+                            <div class="counter-display">0</div>
+                            <button class="counter-btn plus">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section total-section">
+            <h2>Total General</h2>
+            <div class="total-amount" id="totalAmount">₡0</div>
+            <button class="reset-btn" onclick="resetAll()">Reiniciar Todo</button>
+        </div>
+    </div>
+
+    <script>
+        // Objeto para almacenar las cantidades de cada denominación
+        const amounts = {};
+        
+        // Inicializar todas las denominaciones en 0
+        document.querySelectorAll('.denomination').forEach(denom => {
+            const value = parseInt(denom.dataset.value);
+            amounts[value] = 0;
+        });
+
+        // Función para formatear números con separadores de miles
+        function formatCurrency(amount) {
+            return '₡' + amount.toLocaleString('es-CR');
+        }
+
+        // Función para actualizar el display de una denominación específica
+        function updateDenomination(denominationElement, value) {
+            const count = amounts[value];
+            const total = count * value;
+            
+            denominationElement.querySelector('.counter-display').textContent = count;
+            denominationElement.querySelector('.denomination-total').textContent = formatCurrency(total);
+            
+            updateGrandTotal();
+        }
+
+        // Función para calcular y mostrar el total general
+        function updateGrandTotal() {
+            let grandTotal = 0;
+            for (const [value, count] of Object.entries(amounts)) {
+                grandTotal += parseInt(value) * count;
+            }
+            
+            document.getElementById('totalAmount').textContent = formatCurrency(grandTotal);
+        }
+
+        // Función para incrementar una denominación
+        function increment(value, denominationElement) {
+            amounts[value]++;
+            updateDenomination(denominationElement, value);
+        }
+
+        // Función para decrementar una denominación
+        function decrement(value, denominationElement) {
+            if (amounts[value] > 0) {
+                amounts[value]--;
+                updateDenomination(denominationElement, value);
+            }
+        }
+
+        // Función para reiniciar todo
+        function resetAll() {
+            for (const value in amounts) {
+                amounts[value] = 0;
+            }
+            
+            document.querySelectorAll('.denomination').forEach(denom => {
+                const value = parseInt(denom.dataset.value);
+                updateDenomination(denom, value);
+            });
+        }
+
+        // Agregar event listeners a todos los botones
+        document.querySelectorAll('.denomination').forEach(denominationElement => {
+            const value = parseInt(denominationElement.dataset.value);
+            const plusBtn = denominationElement.querySelector('.plus');
+            const minusBtn = denominationElement.querySelector('.minus');
+            
+            plusBtn.addEventListener('click', () => increment(value, denominationElement));
+            minusBtn.addEventListener('click', () => decrement(value, denominationElement));
+        });
+
+        // Agregar efectos de sonido visual al hacer clic
+        document.querySelectorAll('.counter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+            });
+        });
+
+        // Inicializar el total al cargar la página
+        updateGrandTotal();
+    </script>
+</body>
+</html>
